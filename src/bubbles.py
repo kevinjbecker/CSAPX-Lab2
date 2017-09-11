@@ -6,7 +6,7 @@ from math import pi
 def main():
     initial_bubble_radius = int(input("Desired initial bubble radius (100 or more is suggested): "))
     fanout = int(input("Desired fanout (1 or more; a higher number will take longer): "))
-    shrinkage = float(input("Desired shrinkage rate (between 0 and 1, exclusive): "))
+    shrinkage = float(input("Desired shrinkage (between 0 and 1, exclusive): "))
     child_probability = float(input("Desired child probability (between 0 and 1, inclusive): "))
     turtle.speed(0)
     area = draw_bubbles(initial_bubble_radius, fanout, shrinkage, child_probability)
@@ -27,14 +27,18 @@ def draw_bubbles(radius: float, fanout: int, shrinkage: float, child_probability
         return 0.0
     else:
         area = 0
+        turtle.pencolor(colors[count % len(colors)])
         turtle.fillcolor(colors[count % len(colors)])
+        turtle.down()
         turtle.begin_fill()
         turtle.circle(radius, full_circle_degrees)
+        turtle.up()
         turtle.end_fill()
         for _ in range(0, fanout):
             turtle.circle(radius, full_circle_degrees/fanout)
             turtle.right(half_circle_degrees)  # we use half_circle_degrees so that the next coming circle actually is
-            area += draw_bubbles(int((radius * (1-shrinkage))), fanout, shrinkage, child_probability, (child_probability ** (count+1)), count+1)
+            # ask if keep the 1-shrinkage, or just leave it as is
+            area += draw_bubbles((radius * shrinkage), fanout, shrinkage, child_probability, (child_probability ** (count+1)), count+1)
             turtle.right(half_circle_degrees)
         area += pi * (radius ** 2)
     return area
