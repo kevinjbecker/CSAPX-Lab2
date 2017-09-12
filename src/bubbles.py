@@ -16,6 +16,11 @@ from random import random  # random
 from math import pi        # pi
 
 
+COLORS = 'red', 'dark orange', 'yellow', 'lime green', 'dark turquoise', 'purple', 'deep pink'
+FULL_CIRCLE_DEGREES = 360  # the total number of degrees in a circle is 360
+TURN_AROUND = 180  # the total number of degrees in a half circle is 180
+
+
 def main():
     """
     This function prompts the user to specify the arguments and then creates the drawing based on their input.
@@ -46,29 +51,24 @@ def draw_bubbles(radius: float, fanout: int, shrinkage: float, initial_probabili
 
     :return: float, the area of the bubbles drawn from the returning circle to the furthest down child.
     """
-    colors = 'red', 'dark orange', 'yellow', 'lime green', 'dark turquoise', 'purple', 'deep pink'
-    full_circle_degrees = 360  # the total number of degrees in a circle is 360
-    half_circle_degrees = 180  # the total number of degrees in a half circle is 180
     if random() > current_probability:
-        """ so this only checks current_probability (and not the 
-        count as well for the first time because current_probability is default at 1.0 for the first run
-        which random could never get to it """
+        """ The only way to stop creating children is if the random is greater than the current_probability (it will never be true for 1 """
         return 0.0
     else:
         area = 0
-        turtle.pencolor(colors[count % len(colors)])
-        turtle.fillcolor(colors[count % len(colors)])
+        turtle.pencolor(COLORS[count % len(COLORS)])
+        turtle.fillcolor(COLORS[count % len(COLORS)])
         turtle.down()
         turtle.begin_fill()
-        turtle.circle(radius, full_circle_degrees)
+        turtle.circle(radius, FULL_CIRCLE_DEGREES)
         turtle.up()
         turtle.end_fill()
         for _ in range(0, fanout):
-            turtle.circle(radius, full_circle_degrees/fanout)
-            turtle.right(half_circle_degrees)  # we use half_circle_degrees so that the next coming circle actually is
+            turtle.circle(radius, FULL_CIRCLE_DEGREES/fanout)
+            turtle.right(TURN_AROUND)  # we use TURN_AROUND so that the next coming circle actually is
             # ask if keep the 1-shrinkage, or just leave it as is
             area += draw_bubbles((radius * shrinkage), fanout, shrinkage, initial_probability, (initial_probability ** (count+1)), count+1)
-            turtle.right(half_circle_degrees)
+            turtle.right(TURN_AROUND)
         area += pi * (radius ** 2)
     return area
 
