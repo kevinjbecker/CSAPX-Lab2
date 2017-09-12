@@ -21,7 +21,7 @@ FULL_CIRCLE_DEGREES = 360  # the total number of degrees in a circle is 360
 TURN_AROUND = 180  # the total number of degrees in a half circle is 180
 
 
-def main():
+def main()->None:
     """
     This function prompts the user to specify the arguments and then creates the drawing based on their input.
 
